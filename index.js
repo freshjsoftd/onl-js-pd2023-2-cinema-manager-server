@@ -1,12 +1,15 @@
 // const sumFunc = require('./source')
 const fs = require('fs');
-const path = require('path');
-const os = require('os');
 const http = require('http');
+const path = require('path');
+// const os = require('os');
 // ==========================
-const express = require('express');
+// const express = require('express');
 
-const app = express();
+// ==========================
+const app = require('./src/app')
+
+// const app = express();
 
 // Create server with http module
 const HOST_NAME = '127.0.0.1';
@@ -15,7 +18,7 @@ const server = http.createServer(app)
 
 
 
-app.get('/', (req, res) => {
+/* app.get('/', (req, res) => {
 	fs.readFile('./public/index.html', 'utf8', (err, data) => {
 		if (err) {
 			res.status(404);
@@ -50,7 +53,7 @@ app.get('/img/*', (req, res) => {
         'Content-Type': 'image/gif',
     }).send(data); 
     })
-});
+}); */
 
 server.listen(PORT, HOST_NAME, () =>
 	console.log(`Server running at http://${HOST_NAME}:${PORT}`)
