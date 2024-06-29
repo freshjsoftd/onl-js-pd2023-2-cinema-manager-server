@@ -19,8 +19,8 @@ app.use('/time', getTime, showTime);
 
 app.get('/actors', ActorController.getActors)
 app.get('/actors/:actorId', ActorController.getActorById)
-app.post('/actors/', ActorController.createActor)
-app.put('/actors/:actorId', ActorController.updateActor)
+app.post('/actors', ActorController.createActor)
+app.put('/actors', ActorController.updateActor)
 app.delete('/actors/:actorId', ActorController.deleteActor)
 
 

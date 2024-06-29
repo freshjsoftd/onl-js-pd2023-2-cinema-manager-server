@@ -1,73 +1,125 @@
-// let actors = [
-//     {
-//         id: 1,
-//         fullName: 'Harrison Ford',
-//         birthYear: 1942,
-//         nationality: 'USA',
-//     },
-//     {
-//         id: 2,
-//         fullName: 'Sigourney Weave',
-//         birthYear: 1962,
-//         nationality: 'USA',
-//     },
-//     {
-//         id: 3,
-//         fullName: 'Ian Holm',
-//         birthYear: 1931,
-//         nationality: 'United Kingdom',
-//     },
-//     {
-//         id: 4,
-//         fullName: 'Johnny Depp',
-//         birthYear: 1963,
-//         nationality: 'USA',
-//     },
-// ];
+const db = require('../../db');
 
 class ActorController {
+	async getActors(req, res) {
+		try {
+			const actors = await db.query(
+				`SELECT full_name, birth_year, actor_id
+                FROM actors
+                ORDER BY actor_id`
+			);
+			console.log(actors.rows);
+			res.json(actors.rows);
+		} catch (error) {
+			console.log(error);
+		}
+	}
 
-    getActors(req, res){
-        res.status(200).send(actors);
-    }
+	async getActorById(req, res) {
+		try {
+			const {
+				params: { actorId },
+			} = req;
+			const actor = await db.query(
+				`SELECT
+                actor_id,
+                full_name,
+                birth_year,
+                death_year,
+                foto,
+                nat.description as country
+                FROM actors
+                JOIN nationalities as nat
+                USING(nationality_id)
+                WHERE actor_id=$1`,
+				[actorId]
+			);
+			console.log(actor.rows[0]);
+			res.json(actor.rows[0]);
+		} catch (error) {
+			console.log(error);
+		}
+	}
 
-    getActorById(req, res){
-        const { params: {actorId} } = req;
-        const [actor] = actors.filter((actor) => actor.id === Number(actorId));
-        if(actor){
-            res.status(200).send(actor)
-        }else{
-            res.status(404).send('Actor not found')
-        }
-    }
+	async createActor(req, res) {
+		try {
+			const { full_name, birth_year, death_year, foto, nationality } =
+				req.body;
+			const newActor = await db.query(
+				`
+            INSERT INTO actors
+            (full_name, birth_year,  death_year, foto, nationality_id)
+            VALUES 
+            ($1, $2, $3, $4, (SELECT nationality_id FROM nationalities
+                WHERE title=$5
+            ))
+            RETURNING *
+            `,
+				[full_name, birth_year, death_year, foto, nationality]
+			);
+			res.json(newActor.rows[0]);
+		} catch (error) {
+			console.log(error);
+		}
+	}
 
-    createActor(req, res){
-        const {body} = req;
-        console.log(body)
-        const newActor = {...body}
-        actors.push(newActor)
-        res.status(201).send(newActor)
-    }
+	async updateActor(req, res) {
+		// const { params: {actorId} } = req;
+		try {
+			const {
+				full_name,
+				birth_year,
+				death_year,
+				foto,
+				nationality,
+				actor_id,
+			} = req.body;
+			const updatedActor = await db.query(
+				`UPDATE actors
+                SET
+                full_name=$1,
+				birth_year=$2,
+				death_year=$3,
+				foto=$4,
+				nationality_id=(
+                    SELECT nationality_id FROM nationalities
+                    WHERE title=$5
+                )
+                WHERE actor_id=$6
+                RETURNING *
+                `,
+				[full_name, birth_year, death_year, foto, nationality, actor_id]
+			);
+			res.json(...updatedActor.rows);
+		} catch (error) {
+			console.log(error);
+		}
+	}
 
-    updateActor(req, res){
-        const { params: {actorId} } = req;
-        const {body} = req; 
-        const newActors = actors.map((actor) => {
-            if(actor.id === Number(actorId)){
-                return {...body}
+	async deleteActor(req, res) {
+		try {
+			const {
+				params: { actorId },
+			} = req;
+            const delActor = await db.query(
+                `DELETE FROM actors
+                WHERE actor_id=$1
+                RETURNING full_name, actor_id`,
+                [actorId]
+            )
+            if(delActor.rows.length > 0){
+               res.json(delActor.rows[0]) 
+            }else{
+                res.status(404).send('Actor not found')
             }
-            return actor
-        })
-        console.log(newActors)
-        actors = newActors
-        res.status(200).send(body)
-    }
+            
+		} catch (error) {
+			console.log(error);
+		}
 
-    deleteActor(req, res){
-        const { params: {actorId} } = req;
-        actors = actors.filter((actor) => actor.id !== Number(actorId))
-        res.status(200).send('Ok')
-    }
+		// actors = actors.filter((actor) => actor.id !== Number(actorId));
+		// res.status(200).send('Ok');
+	}
 }
 
 module.exports = new ActorController();
