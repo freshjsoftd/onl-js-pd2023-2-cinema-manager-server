@@ -3,37 +3,19 @@ const path = require('path');
 // ===============================
 const express = require('express');
 // ===============================
+const {getTime, showTime} = require('./middleware/time.mw')
 const ActorController = require('./controllers/actorController')
 
 const app = express();
 
 app.use(express.json());
-// app.use(express.static('./public'))
-app.use(express.static(path.join(__dirname, '..', 'public')))
-// app.use(express.static(path.resolve('public')))
+app.use(express.static(path.resolve('public')))
 
-app.get('/', (req, res) => {
-	fs.readFile('./public/index.html', 'utf8', (err, data) => {
-		if (err) {
-			res.status(404);
-			throw err;
-		}
-		res.set('Content-Type', 'text/html; charset=utf-8').send(data);
-		// res.setHeader('Content-Type', 'text/html; charset=utf-8')
-		// res.write(data)
-	});
-});
-app.get('/contact', (req, res) => {
-	fs.readFile('./public/contact.html', 'utf8', (err, data) => {
-		if (err) {
-			res.status(404);
-			throw err;
-		}
-		res.set('Content-Type', 'text/html; charset=utf-8').send(data);
-		// res.setHeader('Content-Type', 'text/html; charset=utf-8')
-		// res.write(data)
-	});
-});
+// Get-Show time
+// app.use(getTime);
+// app.use(showTime);
+app.use('/time', getTime, showTime);
+
 
 app.get('/actors', ActorController.getActors)
 app.get('/actors/:actorId', ActorController.getActorById)
@@ -59,6 +41,29 @@ app.delete('/actors/:actorId', ActorController.deleteActor)
 // });
 
 /* 
+app.get('/', (req, res) => {
+	fs.readFile('./public/index.html', 'utf8', (err, data) => {
+		if (err) {
+			res.status(404);
+			throw err;
+		}
+		res.set('Content-Type', 'text/html; charset=utf-8').send(data);
+		// res.setHeader('Content-Type', 'text/html; charset=utf-8')
+		// res.write(data)
+	});
+});
+app.get('/contact', (req, res) => {
+	fs.readFile('./public/contact.html', 'utf8', (err, data) => {
+		if (err) {
+			res.status(404);
+			throw err;
+		}
+		res.set('Content-Type', 'text/html; charset=utf-8').send(data);
+		// res.setHeader('Content-Type', 'text/html; charset=utf-8')
+		// res.write(data)
+	});
+});
+
 app.get('/phones/', (req, res) => {
     res.redirect('/contact')
 })

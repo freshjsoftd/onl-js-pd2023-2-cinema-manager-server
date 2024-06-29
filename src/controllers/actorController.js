@@ -1,29 +1,29 @@
-let actors = [
-    {
-        id: 1,
-        fullName: 'Harrison Ford',
-        birthYear: 1942,
-        nationality: 'USA',
-    },
-    {
-        id: 2,
-        fullName: 'Sigourney Weave',
-        birthYear: 1962,
-        nationality: 'USA',
-    },
-    {
-        id: 3,
-        fullName: 'Ian Holm',
-        birthYear: 1931,
-        nationality: 'United Kingdom',
-    },
-    {
-        id: 4,
-        fullName: 'Johnny Depp',
-        birthYear: 1963,
-        nationality: 'USA',
-    },
-];
+// let actors = [
+//     {
+//         id: 1,
+//         fullName: 'Harrison Ford',
+//         birthYear: 1942,
+//         nationality: 'USA',
+//     },
+//     {
+//         id: 2,
+//         fullName: 'Sigourney Weave',
+//         birthYear: 1962,
+//         nationality: 'USA',
+//     },
+//     {
+//         id: 3,
+//         fullName: 'Ian Holm',
+//         birthYear: 1931,
+//         nationality: 'United Kingdom',
+//     },
+//     {
+//         id: 4,
+//         fullName: 'Johnny Depp',
+//         birthYear: 1963,
+//         nationality: 'USA',
+//     },
+// ];
 
 class ActorController {
 

@@ -4,6 +4,7 @@ const http = require('http');
 const path = require('path');
 // const os = require('os');
 // ==========================
+require('dotenv').config()
 // const express = require('express');
 
 // ==========================
@@ -13,8 +14,11 @@ const app = require('./src/app')
 
 // Create server with http module
 const HOST_NAME = '127.0.0.1';
-const PORT = process.env.PORT || 5000;
+// process.env.PORT = 5000;
+const PORT = process.env.PORT ;
 const server = http.createServer(app)
+
+console.log(process.env.PORT)
 
 
 
