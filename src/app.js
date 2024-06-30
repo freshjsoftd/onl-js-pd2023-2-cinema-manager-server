@@ -4,7 +4,9 @@ const path = require('path');
 const express = require('express');
 // ===============================
 const {getTime, showTime} = require('./middleware/time.mw')
-const ActorController = require('./controllers/actorController')
+// const ActorController = require('./controllers/actorController')
+const router = require('./routers')
+// const directorRouter = require('./routers/directorRouters')
 
 const app = express();
 
@@ -17,11 +19,14 @@ app.use(express.static(path.resolve('public')))
 app.use('/time', getTime, showTime);
 
 
-app.get('/actors', ActorController.getActors)
-app.get('/actors/:actorId', ActorController.getActorById)
-app.post('/actors', ActorController.createActor)
-app.put('/actors', ActorController.updateActor)
-app.delete('/actors/:actorId', ActorController.deleteActor)
+app.use('/api', router)
+// app.use(directorRouter)
+
+// app.get('/actors', ActorController.getActors)
+// app.get('/actors/:actorId', ActorController.getActorById)
+// app.post('/actors', ActorController.createActor)
+// app.put('/actors', ActorController.updateActor)
+// app.delete('/actors/:actorId', ActorController.deleteActor)
 
 
 

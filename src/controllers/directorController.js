@@ -1,53 +1,53 @@
 const db = require('../../db');
 
-class ActorController {
-	async getActors(req, res) {
+class DirectorController {
+	async getDirectors(req, res) {
 		try {
-			const actors = await db.query(
-				`SELECT full_name, birth_year, actor_id
-                FROM actors
-                ORDER BY actor_id`
+			const directors = await db.query(
+				`SELECT full_name, birth_year, director_id
+                FROM directors
+                ORDER BY director_id`
 			);
-			console.log(actors.rows);
-			res.json(actors.rows);
+			console.log(directors.rows);
+			res.json(directors.rows);
 		} catch (error) {
 			console.log(error);
 		}
 	}
 
-	async getActorById(req, res) {
+	async getDirectorById(req, res) {
 		try {
 			const {
-				params: { actorId },
+				params: { directorId },
 			} = req;
-			const actor = await db.query(
+			const director = await db.query(
 				`SELECT
-                actor_id,
+                director_id,
                 full_name,
                 birth_year,
                 death_year,
                 foto,
                 nat.description as country
-                FROM actors
+                FROM directors
                 JOIN nationalities as nat
                 USING(nationality_id)
-                WHERE actor_id=$1`,
-				[actorId]
+                WHERE director_id=$1`,
+				[directorId]
 			);
-			console.log(actor.rows[0]);
-			res.json(actor.rows[0]);
+			console.log(director.rows[0]);
+			res.json(director.rows[0]);
 		} catch (error) {
 			console.log(error);
 		}
 	}
 
-	async createActor(req, res) {
+	async createDirector(req, res) {
 		try {
 			const { full_name, birth_year, death_year, foto, nationality } =
 				req.body;
-			const newActor = await db.query(
+			const newDirector = await db.query(
 				`
-            INSERT INTO actors
+            INSERT INTO directors
             (full_name, birth_year,  death_year, foto, nationality_id)
             VALUES 
             ($1, $2, $3, $4, (SELECT nationality_id FROM nationalities
@@ -57,13 +57,13 @@ class ActorController {
             `,
 				[full_name, birth_year, death_year, foto, nationality]
 			);
-			res.json(newActor.rows[0]);
+			res.json(newDirector.rows[0]);
 		} catch (error) {
 			console.log(error);
 		}
 	}
 
-	async updateActor(req, res) {
+	async updateDirector(req, res) {
 		try {
 			const {
 				full_name,
@@ -71,10 +71,10 @@ class ActorController {
 				death_year,
 				foto,
 				nationality,
-				actor_id,
+				director_id,
 			} = req.body;
-			const updatedActor = await db.query(
-				`UPDATE actors
+			const updatedDirector = await db.query(
+				`UPDATE directors
                 SET
                 full_name=$1,
 				birth_year=$2,
@@ -84,41 +84,41 @@ class ActorController {
                     SELECT nationality_id FROM nationalities
                     WHERE title=$5
                 )
-                WHERE actor_id=$6
+                WHERE director_id=$6
                 RETURNING *
                 `,
-				[full_name, birth_year, death_year, foto, nationality, actor_id]
+				[full_name, birth_year, death_year, foto, nationality, director_id]
 			);
-			res.json(...updatedActor.rows);
+			res.json(...updatedDirector.rows);
 		} catch (error) {
 			console.log(error);
 		}
 	}
 
-	async deleteActor(req, res) {
+	async deleteDirector(req, res) {
 		try {
 			const {
-				params: { actorId },
+				params: { directorId },
 			} = req;
-            const delActor = await db.query(
-                `DELETE FROM actors
-                WHERE actor_id=$1
-                RETURNING full_name, actor_id`,
-                [actorId]
+            const delDirector = await db.query(
+                `DELETE FROM directors
+                WHERE director_id=$1
+                RETURNING full_name, director_id`,
+                [directorId]
             )
-            if(delActor.rows.length > 0){
-               res.json(delActor.rows[0]) 
+            if(delDirector.rows.length > 0){
+               res.json(delDirector.rows[0]) 
             }else{
-                res.status(404).send('Actor not found')
+                res.status(404).send('Director not found')
             }
             
 		} catch (error) {
 			console.log(error);
 		}
 
-		// actors = actors.filter((actor) => actor.id !== Number(actorId));
+		// directors = directors.filter((director) => director.id !== Number(directorId));
 		// res.status(200).send('Ok');
 	}
 }
 
-module.exports = new ActorController();
+module.exports = new DirectorController();

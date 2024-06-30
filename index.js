@@ -1,7 +1,7 @@
 // const sumFunc = require('./source')
-const fs = require('fs');
+// const fs = require('fs');
 const http = require('http');
-const path = require('path');
+// const path = require('path');
 // const os = require('os');
 // ==========================
 require('dotenv').config()
@@ -18,7 +18,7 @@ const HOST_NAME = '127.0.0.1';
 const PORT = process.env.PORT ;
 const server = http.createServer(app)
 
-console.log(process.env.PORT)
+// console.log(process.env.PORT)
 
 
 
