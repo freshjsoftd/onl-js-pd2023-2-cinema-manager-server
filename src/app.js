@@ -2,14 +2,18 @@ const fs = require('fs');
 const path = require('path');
 // ===============================
 const express = require('express');
+const cors = require('cors')
 // ===============================
-const {getTime, showTime} = require('./middleware/time.mw')
+// const {getTime, showTime} = require('./middleware/time.mw')
 // const ActorController = require('./controllers/actorController')
+const {errorHandlers: {validationErrorHandler, errorHandler}, time: {getTime, showTime}} = require('./middleware')
 const router = require('./routers')
 // const directorRouter = require('./routers/directorRouters')
 
 const app = express();
 
+
+app.use(cors())
 app.use(express.json());
 app.use(express.static(path.resolve('public')))
 
@@ -18,6 +22,7 @@ app.use(express.static(path.resolve('public')))
 // app.use(showTime);
 app.use('/time', getTime, showTime);
 
+app.use(validationErrorHandler, errorHandler)
 
 app.use('/api', router)
 // app.use(directorRouter)

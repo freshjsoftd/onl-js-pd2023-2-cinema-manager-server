@@ -10,9 +10,9 @@ POST http://localhost:5000/api/actors HTTP/1.1
 Content-Type: application/json
 
 {        
-  "full_name": "Jane Smith-8",
-  "birth_year": "1980-01-01",
-  "death_year": null,
+  "full_name": "J",
+  "birth_year": "1850-01-01",
+  "death_year": "wwe",
   "nationality": "GB"
 }
 
