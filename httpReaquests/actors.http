@@ -10,7 +10,7 @@ POST http://localhost:5000/api/actors HTTP/1.1
 Content-Type: application/json
 
 {        
-  "full_name": "J",
+  "full_name": "Jane",
   "birth_year": "1850-01-01",
   "death_year": "wwe",
   "nationality": "GB"

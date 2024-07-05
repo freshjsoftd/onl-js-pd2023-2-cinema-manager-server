@@ -22,9 +22,9 @@ app.use(express.static(path.resolve('public')))
 // app.use(showTime);
 app.use('/time', getTime, showTime);
 
+app.use('/api', router)
 app.use(validationErrorHandler, errorHandler)
 
-app.use('/api', router)
 // app.use(directorRouter)
 
 // app.get('/actors', ActorController.getActors)

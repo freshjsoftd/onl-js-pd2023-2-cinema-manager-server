@@ -11,8 +11,8 @@ module.exports.validatePerson = async  (req, res, next) => {
         req.body = validatedPerson;
         next();
     } catch (error) {
-        console.log(error.errors.length)
-        next(`Error IS: ${error.errors}`);
+        // console.log(error.errors.length)
+        next(error);
     }
 
 	// Promise style
